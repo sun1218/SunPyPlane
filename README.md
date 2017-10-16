@@ -57,3 +57,9 @@ Pygame写的飞机大战。
 ### 暂停 & 继续
 
 暂停只会停止移动，但不会停止刷敌机。
+
+### 基础演示
+![image](https://github.com/sun1218/SunPyPlane/blob/master/preview/Plane.gif)
+![image](https://github.com/sun1218/SunPyPlane/blob/master/preview/Plane1.gif)
+![image](https://github.com/sun1218/SunPyPlane/blob/master/preview/Plane2.gif)
+![image](https://github.com/sun1218/SunPyPlane/blob/master/preview/Plane3.gif)
