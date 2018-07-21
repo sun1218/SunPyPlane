@@ -9,10 +9,10 @@ import bullet
 import enemy
 
 
-def main():    
+def main():
     pygame.init()
     pygame.mixer.init()
-    
+
     life_image = 'image/life.png'
     bg_music = 'music/game_music.ogg'
     background = "image/background.png"
@@ -56,14 +56,12 @@ def main():
     gameover_image = pygame.image.load("image/gameover.png").convert_alpha()
     me_image = pygame.image.load('image/me.png').convert_alpha()
     me_rect = me_image.get_rect()
-    gameover_rect = gameover_image.get_rect()    
-    again_rect = again_image.get_rect()    
+    gameover_rect = gameover_image.get_rect()
+    again_rect = again_image.get_rect()
     paused_rect = pause_nor_image.get_rect()
     paused_rect.left, paused_rect.top = bg_size[0] - paused_rect.width - 10, 10
     paused_image = pause_nor_image
     tnt_num = 10
-
-
 
     while running:
         if MyPlane.dead == True:
@@ -72,8 +70,7 @@ def main():
             MyPlane.life_num = oldLife
             again = True
             num4 = 0
-            
-            
+
         for event in pygame.event.get():
             if event.type == QUIT:
                 bg_music.stop()
@@ -85,19 +82,19 @@ def main():
                 if event.key == K_RETURN:
                     if harm < 11:
                         harm += 1
-                    if harm >= 11 :
-                        harm = 1 
+                    if harm >= 11:
+                        harm = 1
                 if event.key == K_SPACE:
                     if tnt_num > 0:
                         bomb_sound.play()
-                        
+
                         for each in Enemy:
                             kill.append(each)
                             score += each.score
                         Enemy.clear()
                         Enemy_group = pygame.sprite.Group()
                         tnt_num -= 1
-                        
+
             if event.type == MOUSEBUTTONDOWN:
                 if event.button == 1 and paused_rect.collidepoint(event.pos):
                     paused = not paused
@@ -105,7 +102,7 @@ def main():
                         bg_music.stop()
                     else:
                         bg_music.play(-1)
-                        
+
             if event.type == MOUSEMOTION:
                 if paused_rect.collidepoint(event.pos) == True:
                     if paused == True:
@@ -116,10 +113,8 @@ def main():
                     if paused == True:
                         paused_image = resume_nor_image
                     if paused == True:
-                        paused_image = pause_nor_image 
-                        
-                
-                                        
+                        paused_image = pause_nor_image
+
         screen.blit(Mybackground1, (0, 0))
         key = pygame.key.get_pressed()
         if MyPlane.dead == False and paused == False:
@@ -139,14 +134,12 @@ def main():
                     MyBullet.insert(0, temp)
                     num1 = 0
                 num1 += 1
-                    
-            
-        
+
         for each in Enemy:
             if each.disappear == True:
                 Enemy.remove(each)
             elif paused == False:
-                each.move()                
+                each.move()
                 if each.Enemytype == 'BigEnemy' and each.hit == False:
                     if num3 >= 5:
                         screen.blit(each.default_image[0], each.rect)
@@ -155,29 +148,29 @@ def main():
                 elif each.hit == False:
                     screen.blit(each.default_image[0], each.rect)
                 else:
-                    screen.blit(each.hit_image[0], each.rect)                
-                    
+                    screen.blit(each.hit_image[0], each.rect)
+
         for each in MyBullet:
             if each.disappear == True:
-                MyBullet.remove(each)    
+                MyBullet.remove(each)
             elif paused == False:
                 each.move()
                 screen.blit(each.image, each.rect)
-        
+
         for x in MyBullet:
             for y in Enemy:
                 if pygame.sprite.collide_rect(x, y):
                     MyBullet.remove(x)
                     y.life -= harm
                     break
-                
+
         if MyPlane.not_dead == False:
-            enemies_down = pygame.sprite.spritecollide\
-            (MyPlane, Enemy_group, False, pygame.sprite.collide_mask)
+            enemies_down = pygame.sprite.spritecollide \
+                (MyPlane, Enemy_group, False, pygame.sprite.collide_mask)
         else:
-            enemies_down = pygame.sprite.spritecollide\
-            (My_Protection_cover, Enemy_group, False, pygame.sprite.collide_mask)
-            
+            enemies_down = pygame.sprite.spritecollide \
+                (My_Protection_cover, Enemy_group, False, pygame.sprite.collide_mask)
+
         if enemies_down:
             if MyPlane.not_dead == False and MyPlane.dead == False:
                 MyPlane.life_num -= 1
@@ -193,25 +186,24 @@ def main():
                 except:
                     pass
                 each.dead()
-                kill.append(each)        
-        
-    
+                kill.append(each)
+
         if (num2 % 30) == 0 and num2 != 0:
-            x = randint(0, bg_size[0])            
+            x = randint(0, bg_size[0])
             temp = enemy.SmallEnemy(bg_size)
             temp.init_image()
             temp.init_pos(randint(0, bg_size[0]), 0)
             Enemy.append(temp)
             Enemy_group.add(temp)
         if (num2 % 90) == 0 and num2 != 0:
-            x = randint(0, bg_size[0])            
+            x = randint(0, bg_size[0])
             temp = enemy.MidEnemy(bg_size)
             temp.init_image()
             temp.init_pos(randint(0, bg_size[0]), 0)
             Enemy.insert(0, temp)
             Enemy_group.add(temp)
         if (num2 % 250) == 0 and num2 != 0:
-            x = randint(0, bg_size[0])            
+            x = randint(0, bg_size[0])
             temp = enemy.BigEnemy(bg_size)
             temp.init_image()
             temp.init_pos(randint(0, bg_size[0]), 0)
@@ -226,8 +218,7 @@ def main():
             else:
                 screen.blit(k.dead_image[0], k.rect)
                 del k.dead_image[0]
-                       
-        
+
         for each in Enemy:
             if each.life <= 0:
                 each.dead()
@@ -236,59 +227,57 @@ def main():
                 kill.append(each)
                 score += each.score
                 continue
-            
+
             if each.life <= each.hitLife / 2 and each.hit == False:
                 each.hit = True
-        
+
         if num3 >= 10:
-            num3 = 0 
-        
+            num3 = 0
+
         num2 += 1
         num3 += 1
-        
+
         if MyPlane.not_dead == True and paused == False:
-            My_Protection_cover.move\
-            (MyPlane.rect.centerx,MyPlane.rect.centery)
-            screen.blit(\
-            My_Protection_cover.image,\
-            My_Protection_cover.rect)
-            
+            My_Protection_cover.move \
+                (MyPlane.rect.centerx, MyPlane.rect.centery)
+            screen.blit( \
+                My_Protection_cover.image, \
+                My_Protection_cover.rect)
+
         if MyPlane.dead == False:
             if num3 <= 5:
                 screen.blit(MyPlane.default_image[0], MyPlane.rect)
-        
+
             elif num3 > 5:
-                screen.blit(MyPlane.default_image[1], MyPlane.rect)        
-            
+                screen.blit(MyPlane.default_image[1], MyPlane.rect)
+
         score_text = score_font.render("Score : %s" % str(score), True, (255, 0, 0))
         screen.blit(score_text, (10, 5))
-        
-    
+
         for i in range(0, MyPlane.life_num):
-            screen.blit(MyLife, (0+(life_rect.w * i),bg_size[1]-life_rect.h))
-            
+            screen.blit(MyLife, (0 + (life_rect.w * i), bg_size[1] - life_rect.h))
+
         if MyPlane.life_num <= 0:
-            game_over_text = score_font.render\
-            ("Game Over" , True, (0, 0, 0))
+            game_over_text = score_font.render \
+                ("Game Over", True, (0, 0, 0))
             game_over_rect = game_over_text.get_rect()
-            screen.blit(Mybackground1, (0, 0))            
-            
+            screen.blit(Mybackground1, (0, 0))
+
             Enemy.clear()
             running = False
             bg_music.stop()
             is_about_me = False
-            again_rect.left, again_rect.top =\
-                ((bg_size[0]- again_rect.width) // 2, bg_size[1]//2-gameover_rect.height)
-            gameover_rect.left , gameover_rect.top =\
-                ((bg_size[0] - gameover_rect.width) // 2, bg_size[1]//2)
+            again_rect.left, again_rect.top = \
+                ((bg_size[0] - again_rect.width) // 2, bg_size[1] // 2 - gameover_rect.height)
+            gameover_rect.left, gameover_rect.top = \
+                ((bg_size[0] - gameover_rect.width) // 2, bg_size[1] // 2)
             about_me_rect.left, about_me_rect.top = \
-                ((bg_size[0] - about_me_rect.width) // 2, bg_size[1]//2+about_me_rect.height)
-            me_rect.left ,me_rect.top = (bg_size[0] - me_rect.width)//2, (bg_size[1]//2-me_rect.height-about_me_rect.height)
-            
-            
+                ((bg_size[0] - about_me_rect.width) // 2, bg_size[1] // 2 + about_me_rect.height)
+            me_rect.left, me_rect.top = (bg_size[0] - me_rect.width) // 2, (
+                    bg_size[1] // 2 - me_rect.height - about_me_rect.height)
+
             while True:
-                
-                
+
                 for event in pygame.event.get():
                     if event.type == QUIT:
                         bg_music.stop()
@@ -297,43 +286,41 @@ def main():
                     if event.type == MOUSEBUTTONDOWN:
                         pos = pygame.mouse.get_pos()
                         if again_rect.left < pos[0] < again_rect.right and \
-                           again_rect.top < pos[1] < again_rect.bottom:
-                            
+                                again_rect.top < pos[1] < again_rect.bottom:
+
                             main()
                         elif gameover_rect.left < pos[0] < gameover_rect.right and \
-                             gameover_rect.top < pos[1] < gameover_rect.bottom:
+                                gameover_rect.top < pos[1] < gameover_rect.bottom:
                             pygame.quit()
                             sys.exit()
                         elif about_me_rect.left < pos[0] < about_me_rect.right and \
-                            about_me_rect.top < pos[1] < about_me_rect.bottom:
+                                about_me_rect.top < pos[1] < about_me_rect.bottom:
                             is_about_me = not is_about_me
 
-                
-                
                 game_over_rect = game_over_text.get_rect()
                 screen.blit(Mybackground1, (0, 0))
-                screen.blit\
-                (game_over_text,((bg_size[0] - game_over_rect.width) // 2, bg_size[1]//2-100))                
-                if is_about_me  == True:
+                screen.blit \
+                    (game_over_text, ((bg_size[0] - game_over_rect.width) // 2, bg_size[1] // 2 - 100))
+                if is_about_me == True:
                     screen.blit(me_image, me_rect)
-                screen.blit(score_text,(0, 10))
-                
+                screen.blit(score_text, (0, 10))
+
                 screen.blit(again_image, again_rect)
                 screen.blit(gameover_image, gameover_rect)
                 screen.blit(about_me_image, about_me_rect)
                 pygame.display.flip()
-                clock.tick(60) 
-                    
+                clock.tick(60)
+
         if again == True:
             num4 += 1
             if num4 == 600:
                 del num4
                 again = False
                 MyPlane.not_dead = False
-        
+
         pos = pygame.mouse.get_pos()
         if paused_rect.left < pos[0] < paused_rect.right and \
-            paused_rect.top < pos[1] < paused_rect.bottom:        
+                paused_rect.top < pos[1] < paused_rect.bottom:
             if paused == True:
                 paused_image = resume_pressed_image
             if paused == False:
@@ -342,15 +329,11 @@ def main():
             if paused == True:
                 paused_image = resume_nor_image
             if paused == False:
-                paused_image = pause_nor_image             
-            
-        
+                paused_image = pause_nor_image
+
         screen.blit(paused_image, paused_rect)
         pygame.display.flip()
         clock.tick(60)
-        
-        
-        
 
 
 if __name__ == '__main__':
